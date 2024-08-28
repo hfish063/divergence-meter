@@ -17,6 +17,8 @@ I decided to develop it as a desktop application, based on the Java Swing librar
 
 ## Overview
 
+### Pomodoro Timer 
 ![study](https://github.com/hfish063/divergence-meter/blob/0a0a8e41349c40502e4344f852092832490176cf/src/main/resources/examples/study.png)
 
+### Random Digits
 ![random](https://github.com/hfish063/divergence-meter/blob/0a0a8e41349c40502e4344f852092832490176cf/src/main/resources/examples/random.png)
