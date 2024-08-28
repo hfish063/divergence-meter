@@ -2,13 +2,13 @@ package org.example.run.controller;
 
 import org.example.run.components.ControlBar;
 import org.example.run.components.DivergenceMeter;
-import org.example.run.components.GenerateListener;
+import org.example.run.pomodoro.PomodoroState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class MainFrame extends JFrame implements GenerateListener {
+public class MainFrame extends JFrame implements DrawListener, TimeListener {
     private DivergenceMeter divergenceMeter;
     private ControlBar controlBar;
 
@@ -24,10 +24,13 @@ public class MainFrame extends JFrame implements GenerateListener {
         divergenceMeter = new DivergenceMeter();
         controlBar = new ControlBar();
 
-        controlBar.setGenerateListener(this);
+        divergenceMeter.setTimeListener(this);
+        controlBar.setDrawListener(this);
 
         add(divergenceMeter, BorderLayout.NORTH);
         add(controlBar, BorderLayout.SOUTH);
+
+        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("images/icon.png")).getImage());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack(); // Important: size window based off preferred sizes of components
@@ -35,8 +38,15 @@ public class MainFrame extends JFrame implements GenerateListener {
     }
 
     @Override
-    public void randomEventOccured() {
+    public void stateChangeOccurred(PomodoroState state) {
+        controlBar.setStateLabel(state);
+    }
+
+    @Override
+    public void randomEventOccurred() {
         Random rand = new Random();
+
+        divergenceMeter.reset();
 
         divergenceMeter.setHours(rand.nextInt(24) + 1);
         divergenceMeter.setMinutes(rand.nextInt(60) + 1);
@@ -44,7 +54,17 @@ public class MainFrame extends JFrame implements GenerateListener {
     }
 
     @Override
-    public void resetEventOccured() {
+    public void startEventOccurred() {
+        divergenceMeter.start();
+    }
+
+    @Override
+    public void pauseEventOccurred() {
+        divergenceMeter.pause();
+    }
+
+    @Override
+    public void resetEventOccurred() {
         divergenceMeter.reset();
     }
 }
