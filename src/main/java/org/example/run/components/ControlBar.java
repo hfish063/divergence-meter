@@ -5,12 +5,9 @@ import org.example.run.pomodoro.PomodoroState;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static org.example.run.utils.PomodoroUtils.getColorForPomodoroState;
 
 public class ControlBar extends JPanel implements ActionListener {
     private JButton startBtn;
@@ -77,12 +74,10 @@ public class ControlBar extends JPanel implements ActionListener {
         drawListener = listener;
     }
 
-    public void setStateLabel(PomodoroState state) {
+    public void setStateLabel(PomodoroState state, Color color) {
         stateLabel.setText(state.toString());
 
-        Color textColor = getColorForPomodoroState(state);
-
-        stateLabel.setForeground(textColor);
+        stateLabel.setForeground(color);
     }
 
     @Override

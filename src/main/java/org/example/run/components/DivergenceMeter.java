@@ -10,20 +10,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static org.example.run.utils.PomodoroUtils.getColorForPomodoroState;
-
 public class DivergenceMeter extends JPanel implements ActionListener {
     private static final int NUM_OF_TUBES = 8;
-    private static final int ONE_SECOND = 1000;
+    private static final int ONE_SECOND = 1;
 
     private Pomodoro pomodoro;
     private ImageUtils imageUtils;
-
 
     private JLabel[] tubes;
     private Timer timer;
 
     private TimeListener timeListener;
+
+    private Color borderColor;
 
     private int timeElapsed;
 
@@ -33,12 +32,13 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         layout.setVgap(0);
         setLayout(layout);
 
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-
         pomodoro = new Pomodoro();
         tubes = new JLabel[NUM_OF_TUBES];
         imageUtils = new ImageUtils();
         timer = new Timer(ONE_SECOND, this);
+        borderColor = Color.BLACK;
+
+        setBorder(BorderFactory.createLineBorder(borderColor));
 
         timeElapsed = 0;
 
@@ -63,11 +63,6 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         }
     }
 
-    private void drawPoints() {
-        tubes[2].setIcon(imageUtils.findImage("point"));
-        tubes[5].setIcon(imageUtils.findImage("point"));
-    }
-
     public void start() {
         timer.start();
     }
@@ -81,11 +76,22 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         setMinutes(0);
         setSeconds(0);
 
+        timeElapsed = 0;
+
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
         timer.stop();
     }
 
+    private void drawPoints() {
+        tubes[2].setIcon(imageUtils.findImage("point"));
+        tubes[5].setIcon(imageUtils.findImage("point"));
+    }
+
+    /**
+     * Sets the hour tubes (denoted by 1st and 2nd timer digits) to the provided hour
+     * @param hours this integer value is not verified, assumed to be of valid format 0-24
+     */
     public void setHours(int hours) {
         int value = hours / 10;
         tubes[0].setIcon(imageUtils.findImage(String.valueOf(value)));
@@ -94,6 +100,10 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         tubes[1].setIcon(imageUtils.findImage(String.valueOf(value)));
     }
 
+    /**
+     * Sets the minute tubes (denoted by 3rd and 4th timer digits) to the provided minute(s)
+     * @param minutes this integer value is not verified, assumed to be of valid format 0-60
+     */
     public void setMinutes(int minutes) {
         int value = minutes / 10;
         tubes[3].setIcon(imageUtils.findImage(String.valueOf(value)));
@@ -102,6 +112,10 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         tubes[4].setIcon(imageUtils.findImage(String.valueOf(value)));
     }
 
+    /**
+     * Sets the second tubes (denoted by 5th and 6th timer digits) to the provided second(s)
+     * @param seconds this integer value is not verified, assumed to be of valid format 0-60
+     */
     public void setSeconds(int seconds) {
         int value = seconds / 10;
         tubes[6].setIcon(imageUtils.findImage(String.valueOf(value)));
@@ -114,11 +128,17 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         timeListener = listener;
     }
 
+    /**
+     * Performs pomodoro logic when timer state changes
+     * This is where we handle the looping between different states, and update the times accordingly
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         int timeRemaining = pomodoro.getDurationOfCurrentState() - timeElapsed;
         timeListener.stateChangeOccurred(pomodoro.getCurrentState());
-        changeBorder(pomodoro.getCurrentState());
+        changeBorderColor(pomodoro.getCurrentState());
 
         // when remaining time runs out, the pomodoro state advances
         if (timeRemaining <= 0) {
@@ -142,9 +162,14 @@ public class DivergenceMeter extends JPanel implements ActionListener {
         }
     }
 
-    private void changeBorder(PomodoroState state) {
-        Color borderColor = getColorForPomodoroState(state);
+    private void changeBorderColor(PomodoroState state) {
+        borderColor = pomodoro.getColorForState(state);
 
+        // new border object is created and assigned to this JPanel, not able to change color in place
         setBorder(BorderFactory.createLineBorder(borderColor, 3));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
     }
 }
