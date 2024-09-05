@@ -8,6 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * This is the application controller, all behavior and communication between components should be dictated from here.
+ * i.e. components should not reference other components, but rather action should be passed down from the controller.
+ */
 public class MainFrame extends JFrame implements DrawListener, TimeListener {
     private DivergenceMeter divergenceMeter;
     private ControlBar controlBar;
@@ -39,7 +43,7 @@ public class MainFrame extends JFrame implements DrawListener, TimeListener {
 
     @Override
     public void stateChangeOccurred(PomodoroState state) {
-        controlBar.setStateLabel(state);
+        controlBar.setStateLabel(state, divergenceMeter.getBorderColor());
     }
 
     @Override
