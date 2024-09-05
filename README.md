@@ -21,7 +21,7 @@ Process is very simple, as all dependencies are provided in the default Java sui
 - Clone this repository
 - Open the project in your IDE of choice, and run the Main.java file
 
-TODO: .jar packaging
+TODO: dynamic resizing
 
 ## Overview
 
