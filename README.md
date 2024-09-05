@@ -15,6 +15,14 @@ This application serves as a Steins;Gate themed Pomodoro timer.  I use the Pomod
 I decided to develop it as a desktop application, based on the Java Swing library, as it is extremely easy to use, and has been included in the JDK for quite some time now.  Obviously, Swing is seldom used in the real world today, but it does share many features in common with other popular GUI tools.
 
 
+## Usage
+Process is very simple, as all dependencies are provided in the default Java suites.
+- Ensure Java is installed on your machine
+- Clone this repository
+- Open the project in your IDE of choice, and run the Main.java file
+
+TODO: .jar packaging
+
 ## Overview
 
 ### Pomodoro Timer 
